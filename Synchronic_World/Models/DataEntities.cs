@@ -11,9 +11,12 @@ namespace Synchronic_World
     {
         public DbSet<User> UserTable { get; set; }
 
+        public DbSet<RoleUser> RoleUserTable { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasMany<User>(s => s.friends).WithMany(s => s.friends).Map(mc => {
+            modelBuilder.Entity<User>().HasMany(s => s.friends).WithMany().Map(mc =>
+            {
                 mc.ToTable("Friend");
                 mc.MapLeftKey("SenderId");
                 mc.MapRightKey("ReceiverId");
