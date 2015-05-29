@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Synchronic_World;
 using Synchronic_World.Models;
+using System.Web.Security;
+using Synchronic_World.App_Start;
 
 namespace Synchronic_World.Controllers
 {
@@ -16,6 +18,7 @@ namespace Synchronic_World.Controllers
         private DataEntities db = new DataEntities();
 
         // GET: Users
+        [IsAdmin]
         public ActionResult Index()
         {
             var userTable = db.UserTable.Include(u => u.RoleUserTable);
@@ -23,6 +26,7 @@ namespace Synchronic_World.Controllers
         }
 
         // GET: Users/Login
+        [IsLoggedOut]
         public ActionResult Login()
         {
             return View();
@@ -31,6 +35,7 @@ namespace Synchronic_World.Controllers
         // POST: Users/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [IsLoggedOut]
         public ActionResult Login([Bind(Include = "UserEmail,UserPassword")] User user)
         {
             // If user email or user password are empty return a error
@@ -43,11 +48,20 @@ namespace Synchronic_World.Controllers
             User connectedUser = this.getUserByLoginAndPassword(user);
             if (connectedUser != null)
             {
-                return RedirectToAction("Details", new { id = connectedUser.UserId });
+                // Connecte user
+                return this.connecteUser(connectedUser);
             }
 
+            ModelState.AddModelError("ErrorMessage", "Login or password");
+
             // If user doesn't exist return error
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            return View(user);
+        }
+
+        public ActionResult Logout()
+        {
+            // Remove user in session
+            return this.disconnecteUser();
         }
 
         // GET: Users/Details/5
@@ -62,21 +76,24 @@ namespace Synchronic_World.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
             return View(user);
         }
 
         // GET: Users/Register
+        [IsLoggedOut]
         public ActionResult Register()
         {
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Users/Register
         // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [IsLoggedOut]
         [ValidateAntiForgeryToken]
-        public ActionResult Register([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        public ActionResult Register([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +101,37 @@ namespace Synchronic_World.Controllers
                 user.JoinDate = DateTime.Now;
                 db.UserTable.Add(user);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return this.connecteUser(user);
+            }
+
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
+            return View(user);
+        }
+
+        // GET: Users/Create
+        [IsAdmin]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+
+
+        // POST: Users/Create
+        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
+        // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [IsAdmin]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                user.UserRoleId = 3;
+                user.JoinDate = DateTime.Now;
+                db.UserTable.Add(user);
+                db.SaveChanges();
+                return this.connecteUser(user);
             }
 
             ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
@@ -92,6 +139,7 @@ namespace Synchronic_World.Controllers
         }
 
         // GET: Users/Edit/5
+        [IsAdmin]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -111,6 +159,7 @@ namespace Synchronic_World.Controllers
         // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [IsAdmin]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
         {
@@ -125,6 +174,7 @@ namespace Synchronic_World.Controllers
         }
 
         // GET: Users/Delete/5
+        [IsAdmin]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -140,6 +190,7 @@ namespace Synchronic_World.Controllers
         }
 
         // POST: Users/Delete/5
+        [IsAdmin]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -159,26 +210,40 @@ namespace Synchronic_World.Controllers
             base.Dispose(disposing);
         }
 
+        // Add user object into session
+        private RedirectToRouteResult connecteUser(User user)
+        {
+            HttpContext.Session.Add("user", user);
+            return RedirectToAction("Details", new { id = user.UserId });
+        }
+
+        private RedirectToRouteResult disconnecteUser()
+        {
+            HttpContext.Session.Remove("user");
+            return RedirectToAction("Login");
+        }
+
         // Get user by login and password. If user don't exist return null
         private User getUserByLoginAndPassword(User user)
         {
-            foreach (User item in db.UserTable.Where(p => p.UserEmail == user.UserEmail && p.UserPassword == user.UserPassword))
+            // Check if user exist
+            User userConnected = null;
+            try
             {
-                Session["id"] = item.UserId;
+                 userConnected  = db.UserTable.First(p => p.UserEmail == user.UserEmail && p.UserPassword == user.UserPassword);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("User not find");
+            }
 
-                User nUser = new User();
-
-                nUser.UserId = item.UserId;
-                nUser.UserName = item.UserName;
-                nUser.UserPassword = item.UserPassword;
-                nUser.UserRoleId = item.UserRoleId;
-                nUser.UserEmail = item.UserEmail;
-                nUser.JoinDate = item.JoinDate;
-
-                return nUser;
+            if (userConnected != null)
+            {
+                return userConnected;
             }
 
             return null;
+
         }
     }
 }

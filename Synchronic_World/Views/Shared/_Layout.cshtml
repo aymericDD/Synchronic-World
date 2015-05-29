@@ -21,9 +21,21 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Login", "Login", "Users", new { area = "" }, new { @class = "item" })</li>
-                    <li>@Html.ActionLink("Register", "Register", "Users", new { area = "" }, new { @class = "item" })</li>
+                    @if (@Session["user"] == null)
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Users", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("Register", "Register", "Users", new { area = "" }, new { @class = "item" })</li>
+                    }
+                    else
+                    {  
+                        Synchronic_World.Models.User user = (Synchronic_World.Models.User)Session["user"];
+                        <li><a class="blog-nav-item">Hello @user.UserName</a></li>
+                        <li>@Html.ActionLink("Logout", "Logout", "Users", new { area = "" }, new { @class = "item" })</li>
+                    }
+
+                    
                 </ul>
+
             </div>
         </div>
     </div>
