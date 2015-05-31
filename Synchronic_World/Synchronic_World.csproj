@@ -172,6 +172,7 @@
     <Content Include="Views\Events\EditEvent.cshtml" />
     <Content Include="Views\Events\DetailsEvent.cshtml" />
     <Content Include="Views\Events\DeleteEvent.cshtml" />
+    <Content Include="Views\Events\InvitedEvents.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

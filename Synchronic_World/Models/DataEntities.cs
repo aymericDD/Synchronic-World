@@ -13,10 +13,6 @@ namespace Synchronic_World
 
         public DbSet<RoleUser> RoleUserTable { get; set; }
 
-        //public DbSet<TypeEvent> TypeEventTable { get; set; }
-
-        //public DbSet<StatusEvent> StatusEventTable { get; set; }
-
         public DbSet<Event> EventTable { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Synchronic_World.Models.Event>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Invited events";
 }
 
-<h2>Index</h2>
+<h2>Invited events</h2>
 
 <table class="table">
     <tr>
@@ -60,11 +60,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TypeEvent)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditEvent", new { id = item.EventId }) |
-            @Html.ActionLink("Details", "DetailsEvent", new { id=item.EventId }) |
-            @Html.ActionLink("Delete", "DeleteEvent", new { id=item.EventId })
         </td>
     </tr>
 }

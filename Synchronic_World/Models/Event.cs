@@ -23,7 +23,7 @@ namespace Synchronic_World.Models
         [Display(Name = "Start date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         [DataType(DataType.Date)]
-        public DateTime PublishedDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [Required]
         [Display(Name = "End date")]

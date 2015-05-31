@@ -37,6 +37,7 @@
                         <li>@Html.ActionLink("My friends", "Friends", "Users", new { area = "" }, new { @class = "item" })</li>
                         <li>@Html.ActionLink("New event", "NewEvent", "Events", new { area = "" }, new { @class = "item" })</li>
                         <li>@Html.ActionLink("My events created", "MyEvents", "Events", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("Invited events", "InvitedEvents", "Events", new { area = "" }, new { @class = "item" })</li>
                         if (user.UserRoleId == 1)
                         {
                             <li>@Html.ActionLink("Users admin", "Index", "Users", new { area = "" }, new { @class = "item" })</li>

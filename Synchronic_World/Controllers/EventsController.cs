@@ -55,7 +55,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsLogginIn]
         [ValidateAntiForgeryToken]
-        public ActionResult NewEvent([Bind(Include = "EventId,PublishedDate,StartDate,Title,Content,Address,TypeEvent")] Event @event)
+        public ActionResult NewEvent([Bind(Include = "EventId,EndDate,StartDate,Title,Content,Address,TypeEvent")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -78,6 +78,17 @@ namespace Synchronic_World.Controllers
             User user = (User)HttpContext.Session["user"];
             User me = db.UserTable.Find(user.UserId);
             ICollection<Event> LEvents = me.Events;
+            return View(LEvents);
+        }
+
+
+        // GET: Events/InvitedEvents
+        [IsLogginIn]
+        public ActionResult InvitedEvents()
+        {
+            User user = (User)HttpContext.Session["user"];
+            User me = db.UserTable.Find(user.UserId);
+            ICollection<Event> LEvents = me.ParticpationEvents;
             return View(LEvents);
         }
 
@@ -116,7 +127,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsAdmin]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EventId,PublishedDate,StartDate,Title,Content,Address,OwnerId,StatusEvent,TypeEvent")] Event @event)
+        public ActionResult Create([Bind(Include = "EventId,EndDate,StartDate,Title,Content,Address,OwnerId,StatusEvent,TypeEvent")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -170,7 +181,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsLogginIn]
         [ValidateAntiForgeryToken]
-        public ActionResult EditEvent([Bind(Include = "EventId,PublishedDate,StartDate,Title,Content,Address,OwnerId,StatusEvent,TypeEvent")] Event @event)
+        public ActionResult EditEvent([Bind(Include = "EventId,EndDate,StartDate,Title,Content,Address,OwnerId,StatusEvent,TypeEvent")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -205,7 +216,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsAdmin]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EventId,PublishedDate,StartDate,Title,Content,Address,OwnerId,StatusEvent,TypeEvent")] Event @event)
+        public ActionResult Edit([Bind(Include = "EventId,EndDate,StartDate,Title,Content,Address,OwnerId,StatusEvent,TypeEvent")] Event @event)
         {
             if (ModelState.IsValid)
             {
