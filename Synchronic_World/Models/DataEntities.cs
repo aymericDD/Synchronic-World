@@ -13,14 +13,31 @@ namespace Synchronic_World
 
         public DbSet<RoleUser> RoleUserTable { get; set; }
 
+        //public DbSet<TypeEvent> TypeEventTable { get; set; }
+
+        //public DbSet<StatusEvent> StatusEventTable { get; set; }
+
+        public DbSet<Event> EventTable { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasMany(s => s.friends).WithMany().Map(mc =>
-            {
-                mc.ToTable("Friend");
-                mc.MapLeftKey("SenderId");
-                mc.MapRightKey("ReceiverId");
+
+            modelBuilder.Entity<User>().HasMany(p => p.friends).WithMany().Map(m => 
+            { 
+                m.MapLeftKey("FriendsId");
+                m.MapRightKey("friendIdtwo"); 
+                m.ToTable("FriendLiaison"); 
             });
+
+            modelBuilder.Entity<User>()
+                .HasMany(s => s.ParticpationEvents)
+                .WithMany(c => c.Participants)
+                .Map(t =>
+                {
+                    t.MapLeftKey("UserId")
+                    .MapRightKey("EventId")
+                    .ToTable("ParticipationEvent");
+                });
 
             base.OnModelCreating(modelBuilder);
         }

@@ -100,10 +100,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Synchronic_World.mdf" />
-    <Content Include="App_Data\Synchronic_World_log.ldf">
-      <DependentUpon>Synchronic_World.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -128,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Filters\IsAdmin.cs" />
     <Compile Include="Filters\IsLoggedOut.cs" />
     <Compile Include="Filters\IsLogginIn.cs" />
@@ -140,6 +137,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\Type.cs" />
+    <Compile Include="Models\TypeEvent.cs" />
+    <Compile Include="Models\StatusEvent.cs" />
     <Compile Include="Models\RoleUser.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,6 +157,21 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Login.cshtml" />
     <Content Include="Views\Home\index.cshtml" />
+    <Content Include="Views\Users\EditProfile.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
+    <Content Include="Views\Users\SearchFriend.cshtml" />
+    <Content Include="Views\Users\Friends.cshtml" />
+    <Content Include="Views\Events\Create.cshtml" />
+    <Content Include="Views\Events\Delete.cshtml" />
+    <Content Include="Views\Events\Details.cshtml" />
+    <Content Include="Views\Events\Edit.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\Events\NewEvent.cshtml" />
+    <Content Include="Views\Events\MyEvents.cshtml" />
+    <Content Include="Views\Events\EditEvent.cshtml" />
+    <Content Include="Views\Events\DetailsEvent.cshtml" />
+    <Content Include="Views\Events\DeleteEvent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -164,7 +179,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

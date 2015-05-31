@@ -13,6 +13,8 @@ namespace Synchronic_World.Models
         public User()
         {
             friends = new HashSet<User>();
+            Events = new HashSet<Event>();
+            ParticpationEvents = new HashSet<Event>();
         }
 
         [Key, HiddenInput(DisplayValue = false)]
@@ -23,6 +25,7 @@ namespace Synchronic_World.Models
         public string UserName { get; set; }
 
         [Display(Name = "User email")]
+        [DataType(DataType.EmailAddress)]
         [EmailAddressAttribute]
         public string UserEmail { get; set; }
 
@@ -34,7 +37,7 @@ namespace Synchronic_World.Models
 
         [Display(Name = "Enrollment date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        [HiddenInput(DisplayValue=false)]
+        [DataType(DataType.Date)]
         public DateTime JoinDate { get; set; }
 
         [HiddenInput(DisplayValue= false)]
@@ -43,7 +46,10 @@ namespace Synchronic_World.Models
         [ForeignKey("UserRoleId")]
         public virtual RoleUser RoleUserTable { get; set; }
 
-        [HiddenInput(DisplayValue = false)]
         public virtual ICollection<User> friends { get; set; }
+
+        public virtual ICollection<Event> Events { get; set; }
+
+        public virtual ICollection<Event> ParticpationEvents { get; set; }
     }
 }

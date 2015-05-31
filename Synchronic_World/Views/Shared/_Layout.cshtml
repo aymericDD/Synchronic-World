@@ -31,6 +31,17 @@
                         Synchronic_World.Models.User user = (Synchronic_World.Models.User)Session["user"];
                         <li><a class="blog-nav-item">Hello @user.UserName</a></li>
                         <li>@Html.ActionLink("Logout", "Logout", "Users", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("Edit Profile", "EditProfile", "Users", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("Change password", "ChangePassword", "Users", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("Search friend", "SearchFriend", "Users", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("My friends", "Friends", "Users", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("New event", "NewEvent", "Events", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("My events created", "MyEvents", "Events", new { area = "" }, new { @class = "item" })</li>
+                        if (user.UserRoleId == 1)
+                        {
+                            <li>@Html.ActionLink("Users admin", "Index", "Users", new { area = "" }, new { @class = "item" })</li>
+                            <li>@Html.ActionLink("Events admin", "Index", "Events", new { area = "" }, new { @class = "item" })</li>
+                        }
                     }
 
                     

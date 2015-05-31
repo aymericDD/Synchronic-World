@@ -12,6 +12,7 @@ namespace Synchronic_World.App_Start
 {
     public class IsAdmin : ActionFilterAttribute
     {
+        private DataEntities db = new DataEntities();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -19,9 +20,13 @@ namespace Synchronic_World.App_Start
             // Get User object in session
             User user = (User)HttpContext.Current.Session["user"];
 
-            // If user exist return it to home page
+            // If user is not admin return it to home page
             if (user != null)
             {
+                user = (User)db.UserTable.First(p => p.UserEmail == user.UserEmail);
+                db.Entry(user).Reload();
+                HttpContext.Current.Session["user"] = user;
+
                 if (user.UserRoleId != 1)
                 {
                     filterContext.Result = new RedirectToRouteResult(
@@ -33,7 +38,7 @@ namespace Synchronic_World.App_Start
             else
             {
                 filterContext.Result = new RedirectToRouteResult(
-                   new RouteValueDictionary{{ "controller", "User" },
+                   new RouteValueDictionary{{ "controller", "Users" },
                                           { "action", "login" }
                                          });
             }

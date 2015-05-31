@@ -12,6 +12,7 @@ namespace Synchronic_World.App_Start
 {
     public class IsLoggedOut : ActionFilterAttribute
     {
+        private DataEntities db = new DataEntities();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -22,6 +23,10 @@ namespace Synchronic_World.App_Start
             // If user exist return it to home page
             if (user != null)
             {
+                user = (User)db.UserTable.First(p => p.UserEmail == user.UserEmail);
+                db.Entry(user).Reload();
+                HttpContext.Current.Session["user"] = user;
+
                 filterContext.Result = new RedirectToRouteResult(
                 new RouteValueDictionary{{ "controller", "Home" },
                                           { "action", "Index" }

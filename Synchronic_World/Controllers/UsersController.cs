@@ -58,6 +58,7 @@ namespace Synchronic_World.Controllers
             return View(user);
         }
 
+        // GET: Users/Logout
         public ActionResult Logout()
         {
             // Remove user in session
@@ -112,14 +113,74 @@ namespace Synchronic_World.Controllers
         [IsAdmin]
         public ActionResult Create()
         {
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role");
             return View();
         }
 
+        // GET: Users/EditProfile
+        [IsLogginIn]
+        public ActionResult EditProfile()
+        {
+            User user = (User)HttpContext.Session["user"];
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
+            return View(user);
+        }
 
+        // POST: Users/EditProfile
+        [HttpPost]
+        [IsLogginIn]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProfile([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                User ConnectedUser = (User)HttpContext.Session["user"];
+                ConnectedUser.UserName = user.UserName;
+                ConnectedUser.UserEmail = user.UserEmail;
+                return View(ConnectedUser);
+            }
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
+            return View(user);
+        }
+
+        // GET: Users/ChangePassword
+        [IsLogginIn]
+        public ActionResult ChangePassword()
+        {
+            User user = (User)HttpContext.Session["user"];
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
+            return View(user);
+        }
+
+        // POST: Users/ChangePassword
+        [HttpPost]
+        [IsLogginIn]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                User ConnectedUser = (User)HttpContext.Session["user"];
+                ConnectedUser.UserPassword = user.UserPassword;
+                return View(ConnectedUser);
+            }
+            ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
+            return View(user);
+        }
 
         // POST: Users/Create
-        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
-        // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [IsAdmin]
         [ValidateAntiForgeryToken]
@@ -127,11 +188,9 @@ namespace Synchronic_World.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.UserRoleId = 3;
-                user.JoinDate = DateTime.Now;
                 db.UserTable.Add(user);
                 db.SaveChanges();
-                return this.connecteUser(user);
+                return RedirectToAction("Index");
             }
 
             ViewBag.UserRoleId = new SelectList(db.RoleUserTable, "RoleUserId", "Role", user.UserRoleId);
@@ -201,6 +260,78 @@ namespace Synchronic_World.Controllers
             return RedirectToAction("Index");
         }
 
+        [IsLogginIn]
+        public ActionResult SearchFriend()
+        {
+            IEnumerable<User> LFriends = (IEnumerable<User>)db.UserTable.ToList<User>();
+            if (LFriends.Count() > 0 && LFriends != null)
+            {
+                return View(LFriends);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [IsLogginIn]
+        public ActionResult SearchFriend(String userName)
+        {
+            IEnumerable<User> LFriends = (IEnumerable<User>)db.UserTable.Where(u => u.UserName.Contains(userName)).ToList<User>();
+            if (LFriends.Count() > 0 && LFriends != null)
+            {
+                return View(LFriends);
+            }
+            return View();
+        }
+
+        [IsLogginIn]
+        public ActionResult AddFriend(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            User friend = db.UserTable.FirstOrDefault(p => p.UserId == id);
+
+            User currentUser = (User)HttpContext.Session["User"];
+
+            int id1 = currentUser.UserId;
+
+            if (friend != null)
+            {
+                User me = db.UserTable.FirstOrDefault(u => u.UserId == id1);
+
+                me.friends.Add(friend);
+
+                friend.friends.Add(me);
+                
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("SearchFriend");
+        }
+
+        public ActionResult Friends()
+        {
+            User currentUser = (User)HttpContext.Session["User"];
+            User me = db.UserTable.FirstOrDefault(u => u.UserId == currentUser.UserId);
+            IEnumerable<User> LFriends = me.friends;
+            return View(LFriends);
+        }
+
+        [IsLogginIn]
+        public ActionResult RemoveFriend(int? id)
+        {
+            return View();
+        }
+
+        [IsLogginIn]
+        public ActionResult SearchUsers()
+        {
+
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -214,6 +345,7 @@ namespace Synchronic_World.Controllers
         private RedirectToRouteResult connecteUser(User user)
         {
             HttpContext.Session.Add("user", user);
+            User us = (User)HttpContext.Session["user"];
             return RedirectToAction("Details", new { id = user.UserId });
         }
 

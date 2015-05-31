@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Synchronic_World.Models.User>
+@{
+    Synchronic_World.Models.User me = (Synchronic_World.Models.User)@Session["User"];
+}
+
+@{
+    ViewBag.Title = "SearchFriend";
+}
+
+<h2>Search Friend</h2>
+
+@using (Html.BeginForm("SearchFriend", "Users"))
+{
+    @Html.Display("Search User :");
+    @Html.TextBox("userName");
+    <input type="submit" value="Search" />
+}
+
+@if (Model != null)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleUserTable.Role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            if (item.UserId != me.UserId)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoleUserTable.Role)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Add", "AddFriend", new { id = item.UserId })
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+}
