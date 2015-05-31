@@ -13,6 +13,7 @@ namespace Synchronic_World.Models
         public Event() 
         {
             Participants = new HashSet<User>();
+            Contributions = new HashSet<ContributionEvent>();
         }
 
         [Key, HiddenInput(DisplayValue=false)]
@@ -48,18 +49,6 @@ namespace Synchronic_World.Models
 
         [ForeignKey("OwnerId")]
         public virtual User UserTable { get; set; }
-        
-        //[HiddenInput(DisplayValue= false)]
-        //public int TypeEventId  { get; set; }
-
-        //[ForeignKey("TypeEventId")]
-        //public virtual TypeEvent TypeEventTable { get; set; }
-
-        //[HiddenInput(DisplayValue = false)]
-        //public int StatusEventId { get; set; }
-
-        //[ForeignKey("StatusEventId")]
-        //public virtual StatusEvent StatusEventTable { get; set; }
 
         [Required]
         public Type.StatusEvent StatusEvent { get; set; }
@@ -69,6 +58,9 @@ namespace Synchronic_World.Models
 
         [HiddenInput(DisplayValue = false)]
         public virtual ICollection<User> Participants { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public virtual ICollection<ContributionEvent> Contributions { get; set; }
 
     }
 }

@@ -16,5 +16,10 @@ namespace Synchronic_World.Models
         {
             Party, Lunch
         }
+
+        public enum TypeContributionEvent
+        {
+            Money, Food, Beverage
+        }
     }
 }

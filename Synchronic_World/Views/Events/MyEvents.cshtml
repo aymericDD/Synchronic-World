@@ -32,6 +32,12 @@
         <th>
             @Html.DisplayNameFor(model => model.TypeEvent)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Participants)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contributions)
+        </th>
         <th></th>
     </tr>
 
@@ -61,6 +67,31 @@
         <td>
             @Html.DisplayFor(modelItem => item.TypeEvent)
         </td>
+
+        <td>
+            <ul>
+                @foreach (var participant in item.Participants)
+                {
+                    <li>@participant.UserName</li>
+                }
+            </ul>
+
+        </td>
+
+        <td>
+            <ul>
+                @foreach (var contribution in item.Contributions)
+                {
+                    <li>
+                        <p>Name: @contribution.ContributionEventName</p>
+                        <p>Quantity: @contribution.ContributionEventQuantity</p>
+                        <p>Type: @contribution.TypeContributionEvent</p>
+                    </li>
+                }
+            </ul>
+
+        </td>
+
         <td>
             @Html.ActionLink("Edit", "EditEvent", new { id = item.EventId }) |
             @Html.ActionLink("Details", "DetailsEvent", new { id=item.EventId }) |

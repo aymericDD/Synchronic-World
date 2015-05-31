@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Synch World", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -38,6 +38,7 @@
                         <li>@Html.ActionLink("New event", "NewEvent", "Events", new { area = "" }, new { @class = "item" })</li>
                         <li>@Html.ActionLink("My events created", "MyEvents", "Events", new { area = "" }, new { @class = "item" })</li>
                         <li>@Html.ActionLink("Invited events", "InvitedEvents", "Events", new { area = "" }, new { @class = "item" })</li>
+                        <li>@Html.ActionLink("My contributions", "Index", "ContributionEvents", new { area = "" }, new { @class = "item" })</li>
                         if (user.UserRoleId == 1)
                         {
                             <li>@Html.ActionLink("Users admin", "Index", "Users", new { area = "" }, new { @class = "item" })</li>

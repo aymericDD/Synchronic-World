@@ -88,6 +88,24 @@
 
         </dd>
 
+        <dt>
+            Contributions
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.Contributions)
+                {
+                    <li>
+                        <p>Name: @item.ContributionEventName</p>
+                        <p>Quantity: @item.ContributionEventQuantity</p>
+                        <p>Type: @item.TypeContributionEvent</p>
+                    </li>
+                }
+            </ul>
+
+        </dd>
+
     </dl>
 </div>
 <p>

@@ -15,6 +15,7 @@ namespace Synchronic_World.Models
             friends = new HashSet<User>();
             Events = new HashSet<Event>();
             ParticpationEvents = new HashSet<Event>();
+            Contributions = new HashSet<ContributionEvent>();
         }
 
         [Key, HiddenInput(DisplayValue = false)]
@@ -23,6 +24,10 @@ namespace Synchronic_World.Models
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "User surname")]
+        public string UserSurname { get; set; }
 
         [Display(Name = "User email")]
         [DataType(DataType.EmailAddress)]
@@ -51,5 +56,7 @@ namespace Synchronic_World.Models
         public virtual ICollection<Event> Events { get; set; }
 
         public virtual ICollection<Event> ParticpationEvents { get; set; }
+
+        public virtual ICollection<ContributionEvent> Contributions { get; set; }
     }
 }

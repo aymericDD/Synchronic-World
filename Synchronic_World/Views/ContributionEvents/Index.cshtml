@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Synchronic_World.Models.ContributionEvent>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EventTable.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContributionEventName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContributionEventQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeContributionEvent)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EventTable.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContributionEventName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContributionEventQuantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TypeContributionEvent)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ContributionEventId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ContributionEventId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ContributionEventId })
+        </td>
+    </tr>
+}
+
+</table>

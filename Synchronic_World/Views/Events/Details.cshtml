@@ -74,6 +74,38 @@
             @Html.DisplayFor(model => model.TypeEvent)
         </dd>
 
+        <dt>
+            Participants
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.Participants)
+                {
+                    <li>@item.UserName</li>
+                }
+            </ul>
+
+        </dd>
+
+        <dt>
+            Contributions
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.Contributions)
+                {
+                    <li>
+                        <p>Name: @item.ContributionEventName</p>
+                        <p>Quantity: @item.ContributionEventQuantity</p>
+                        <p>Type: @item.TypeContributionEvent</p>
+                    </li>
+                }
+            </ul>
+
+        </dd>
+
     </dl>
 </div>
 <p>

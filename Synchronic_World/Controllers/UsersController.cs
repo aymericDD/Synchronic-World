@@ -36,7 +36,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [IsLoggedOut]
-        public ActionResult Login([Bind(Include = "UserEmail,UserPassword")] User user)
+        public ActionResult Login([Bind(Include = "UserEmail,UserSurname,UserPassword")] User user)
         {
             // If user email or user password are empty return a error
             if (user.UserEmail == null || user.UserPassword == null)
@@ -94,7 +94,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsLoggedOut]
         [ValidateAntiForgeryToken]
-        public ActionResult Register([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate")] User user)
+        public ActionResult Register([Bind(Include = "UserId,UserName,UserSurname,UserEmail,UserPassword,JoinDate")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -134,7 +134,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsLogginIn]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProfile([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        public ActionResult EditProfile([Bind(Include = "UserId,UserName,UserSurname,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -166,7 +166,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsLogginIn]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        public ActionResult ChangePassword([Bind(Include = "UserId,UserName,UserSurname,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -184,7 +184,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsAdmin]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        public ActionResult Create([Bind(Include = "UserId,UserName,UserSurname,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -220,7 +220,7 @@ namespace Synchronic_World.Controllers
         [HttpPost]
         [IsAdmin]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,UserName,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
+        public ActionResult Edit([Bind(Include = "UserId,UserName,UserSurname,UserEmail,UserPassword,JoinDate,UserRoleId")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -275,7 +275,7 @@ namespace Synchronic_World.Controllers
         [IsLogginIn]
         public ActionResult SearchFriend(String userName)
         {
-            IEnumerable<User> LFriends = (IEnumerable<User>)db.UserTable.Where(u => u.UserName.Contains(userName)).ToList<User>();
+            IEnumerable<User> LFriends = (IEnumerable<User>)db.UserTable.Where(u => u.UserName.Contains(userName) || u.UserSurname.Contains(userName)).ToList<User>();
             if (LFriends.Count() > 0 && LFriends != null)
             {
                 return View(LFriends);

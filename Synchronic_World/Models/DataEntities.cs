@@ -35,7 +35,10 @@ namespace Synchronic_World
                     .ToTable("ParticipationEvent");
                 });
 
+
             base.OnModelCreating(modelBuilder);
         }
+
+        public System.Data.Entity.DbSet<Synchronic_World.Models.ContributionEvent> ContributionEvents { get; set; }
     }
 }
