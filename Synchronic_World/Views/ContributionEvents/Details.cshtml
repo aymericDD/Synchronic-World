@@ -1,0 +1,50 @@
+﻿@model Synchronic_World.Models.ContributionEvent
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ContributionEvent</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EventTable.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EventTable.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContributionEventName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContributionEventName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContributionEventQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContributionEventQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeContributionEvent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TypeContributionEvent)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ContributionEventId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

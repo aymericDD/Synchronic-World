@@ -1,0 +1,114 @@
+﻿@model Synchronic_World.Models.Event
+
+@{
+    ViewBag.Title = "Details Event";
+}
+
+<h2>Details Event</h2>
+
+<div>
+    <h4>Event</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserTable.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserTable.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StatusEvent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StatusEvent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeEvent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TypeEvent)
+        </dd>
+
+        <dt>
+            Participants
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.Participants)
+                {
+                    <li>@item.UserName</li>
+                }
+            </ul>
+
+        </dd>
+
+        <dt>
+            Contributions
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.Contributions)
+                {
+                    <li>
+                        <p>Name: @item.ContributionEventName</p>
+                        <p>Quantity: @item.ContributionEventQuantity</p>
+                        <p>Type: @item.TypeContributionEvent</p>
+                    </li>
+                }
+            </ul>
+
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "EditEvent", new { id = Model.EventId }) |
+    @Html.ActionLink("Back to List", "MyEvents")
+</p>
